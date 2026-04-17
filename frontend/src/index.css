@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Warm Soft Theme — not white, not dark */
+  --bg-primary: #f0f1f8;
+  --bg-secondary: #e8e9f3;
+  --bg-tertiary: #dddee9;
+  --bg-card: #f8f8fc;
+  --bg-card-hover: #edeeff;
+  --bg-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Text */
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6a;
+  --text-muted: #8890a4;
+  --text-on-dark: #ffffff;
+
+  /* Accent Colors */
+  --accent: #4f46e5;
+  --accent-light: #818cf8;
+  --accent-lighter: #e0e7ff;
+  --accent-dark: #3730a3;
+  --accent-glow: rgba(79, 70, 229, 0.15);
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --info: #0ea5e9;
+  --info-light: #e0f2fe;
+
+  /* Feature Colors */
+  --purple: #8b5cf6;
+  --purple-light: #ede9fe;
+  --teal: #14b8a6;
+  --teal-light: #ccfbf1;
+  --pink: #ec4899;
+  --pink-light: #fce7f3;
+  --orange: #f97316;
+  --orange-light: #fff7ed;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #4f46e5, #7c3aed);
+  --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+  --gradient-warm: linear-gradient(135deg, #f97316, #fb923c);
+  --gradient-cool: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff 0%, #f7f8fc 100%);
+
+  /* Borders & Shadows */
+  --border: #d5d7e2;
+  --border-light: #e8e9f0;
+  --border-active: #4f46e5;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+  --shadow-accent: 0 8px 30px rgba(79, 70, 229, 0.2);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-handwritten: 'Caveat', cursive;
+
+  /* Spacing — full width utilization */
+  --container-max: 1600px;
+  --content-max: 1400px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar - subtle for light theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: #c4c8d4;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-light);
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* Utility classes */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--accent-lighter);
+  color: var(--accent);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Interactive element indicators */
+button, [role="button"], .clickable {
+  cursor: pointer;
+}
+
+/* Smooth transitions */
+a, button {
+  transition: all 0.2s ease;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
