@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ─── colour palette ─── */
 const INDIGO  = '#4f46e5'
@@ -173,6 +174,17 @@ export default function Topic11_Multimodal() {
 
       {/* ─── 1  What is Multimodal? ─── */}
       <SectionBlock icon="🌐" title="What is Multimodal AI?" color={INDIGO}>
+        <HindiExplainer
+          concept="मल्टीमॉडल AI"
+          english="Multimodal AI"
+          explanation="पहले AI सिर्फ़ text समझता था। अब ये तस्वीरें, audio, video भी समझ सकता है! एक ही model text भी पढ़ सकता है, photo भी देख सकता है, और आवाज़ भी सुन सकता है।"
+          example="पहले AI एक ऐसा दोस्त था जो सिर्फ़ chat कर सकता था। अब ये ऐसा दोस्त है जिसे photo भेजो तो बताता है 'ये Taj Mahal है', voice note भेजो तो सुनकर जवाब देता है। जैसे WhatsApp पर text + photo + voice सब भेज सकते हो!"
+          terms={[
+            { hindi: 'मल्टीमॉडल', english: 'Multimodal', meaning: 'एक से ज़्यादा format — text + image + audio' },
+            { hindi: 'विज़न', english: 'Vision', meaning: 'AI की तस्वीर देखने की क्षमता' },
+            { hindi: 'OCR', english: 'OCR', meaning: 'तस्वीर में लिखा text पढ़ना' },
+          ]}
+        />
         <p style={{ fontSize: 17, color: 'var(--text-secondary)', lineHeight: 1.75, marginBottom: 24 }}>
           A <strong style={{ color: 'var(--text-primary)' }}>multimodal</strong> model can process <em>and</em> produce more than one type of data — text, images, audio, or video — all within a single architecture.
         </p>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
 import NeuralNetworkScene from '../../../components/three/NeuralNetworkScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ================================================================
    TOPIC 1 — What is an LLM?
@@ -298,6 +299,18 @@ export default function Topic1_WhatIsLLM() {
         />
       </div>
 
+      <HindiExplainer
+        concept="LLM क्या है?"
+        english="What is a Large Language Model?"
+        explanation="LLM एक बहुत बड़ा AI program है जो बहुत सारा text पढ़कर सीखता है कि भाषा कैसे काम करती है। ये अगला शब्द predict करता है — बस इतना ही! लेकिन इतने शब्द सीख लेता है कि लगता है ये 'सोच' रहा है।"
+        example="जैसे आपके phone का keyboard अगला शब्द suggest करता है — 'Good' के बाद 'morning' suggest करता है। LLM भी बिल्कुल ऐसे ही काम करता है, बस लाखों गुना smart है!"
+        terms={[
+          { hindi: 'मॉडल', english: 'Model', meaning: 'AI का दिमाग — जिसमें सारी सीखी हुई knowledge है' },
+          { hindi: 'पैरामीटर', english: 'Parameter', meaning: 'AI के दिमाग में छोटे-छोटे knobs — GPT-4 में 1.7 trillion हैं!' },
+          { hindi: 'प्रेडिक्शन', english: 'Prediction', meaning: 'अगला शब्द क्या होगा — इसका अंदाज़ा लगाना' },
+        ]}
+      />
+
       {/* The Story: 3 Cards */}
       <SectionBlock icon="📖" title="The Story of an LLM in 3 Acts" color="#4f46e5">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, marginBottom: 24 }}>
@@ -430,6 +443,17 @@ export default function Topic1_WhatIsLLM() {
         </p>
         <RealWorldUseCases />
       </SectionBlock>
+
+      <HindiExplainer
+        concept="LLM इतना smart कैसे?"
+        english="How LLMs Become Smart"
+        explanation="LLM ने internet का लगभग सारा text पढ़ा है — Wikipedia, किताबें, websites, code सब कुछ। इतना पढ़ने के बाद उसे patterns समझ आ जाते हैं — grammar, facts, reasoning सब।"
+        example="जैसे एक बच्चा जो 10,000 किताबें पढ़ ले — उसे भाषा, grammar, और दुनिया की बहुत सारी बातें automatically समझ आ जाएँगी। LLM ने करोड़ों pages पढ़े हैं!"
+        terms={[
+          { hindi: 'ट्रेनिंग डेटा', english: 'Training Data', meaning: 'वो text जिससे AI ने सीखा — internet जितना बड़ा' },
+          { hindi: 'टोकन', english: 'Token', meaning: 'शब्द का टुकड़ा — AI इन्हीं में बात करता है' },
+        ]}
+      />
 
       {/* Scale */}
       <SectionBlock icon="📈" title="How Big Are Modern LLMs?" color="#8b5cf6">

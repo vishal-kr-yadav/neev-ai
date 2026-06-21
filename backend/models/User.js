@@ -40,6 +40,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
+  lastLogin: {
+    type: Date,
+    default: null,
+  },
 }, {
   timestamps: true,
 })

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import LossLandscapeScene from '../../../components/three/LossLandscapeScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const stages = [
   {
@@ -53,6 +54,18 @@ export default function Topic5_Training() {
           🖱️ Orbit the 3D loss landscape. The red ball (gradient descent) rolls downhill to find the green minimum — this is how models learn!
         </p>
       </div>
+
+      <HindiExplainer
+        concept="AI की ट्रेनिंग"
+        english="Training Process"
+        explanation="LLM को train करने में करोड़ों sentences दिखाए जाते हैं — हर बार एक शब्द छिपा दो और AI को guess करने दो। ग़लत guess → सज़ा (loss), सही guess → शाबाशी। धीरे-धीरे AI बहुत अच्छा हो जाता है।"
+        example="जैसे बच्चे को बोलना सिखाते हैं — 'ये क्या है? ये गाय है।' 1000 बार करो तो बच्चा खुद पहचानने लगता है। AI को भी अरबों बार ऐसे ही सिखाया जाता है — बस computer पर, बहुत तेज़।"
+        terms={[
+          { hindi: 'प्री-ट्रेनिंग', english: 'Pre-training', meaning: 'पहला चरण — internet से सब कुछ पढ़ना' },
+          { hindi: 'लॉस', english: 'Loss', meaning: 'ग़लती का score — कम loss = ज़्यादा smart' },
+          { hindi: 'GPU', english: 'GPU', meaning: 'special computer chip — training के लिए हज़ारों चाहिए' },
+        ]}
+      />
 
       {/* Analogy */}
       <div style={{

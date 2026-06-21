@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ─── colour palette ─── */
 const INDIGO  = '#4f46e5'
@@ -281,6 +282,17 @@ export default function Topic12_ImageGeneration() {
 
       {/* ─── 2  How Diffusion Works ─── */}
       <SectionBlock icon="🌊" title="How Diffusion Models Work" color={VIOLET}>
+        <HindiExplainer
+          concept="AI से तस्वीर बनाना"
+          english="Image Generation"
+          explanation="अब AI text पढ़कर तस्वीर बना सकता है! बस लिखो 'sunset over mountains with a lake' और AI एक beautiful painting बना देगा। ये Diffusion Model कहलाता है — noise से शुरू करके धीरे-धीरे clear image बनाता है।"
+          example="जैसे TV पर static/snow दिखता है ना — अब imagine करो वो static धीरे-धीरे clear होकर एक painting बन जाए! DALL-E और Midjourney ऐसे ही काम करते हैं — random dots से शुरू, clear art पर ख़त्म।"
+          terms={[
+            { hindi: 'डिफ़्यूज़न', english: 'Diffusion', meaning: 'noise से image बनाने की प्रक्रिया — धीरे-धीरे clear करना' },
+            { hindi: 'प्रॉम्प्ट', english: 'Prompt', meaning: 'text description जो AI को बताता है क्या बनाना है' },
+            { hindi: 'स्टेबल डिफ़्यूज़न', english: 'Stable Diffusion', meaning: 'free, open-source image generator' },
+          ]}
+        />
         <p style={{ fontSize: 17, color: 'var(--text-secondary)', lineHeight: 1.75, marginBottom: 24 }}>
           The core idea is beautifully simple: <strong style={{ color: 'var(--text-primary)' }}>teach a model to remove noise</strong>. If you can remove noise step-by-step, you can start from pure static and end up with a crisp image.
         </p>

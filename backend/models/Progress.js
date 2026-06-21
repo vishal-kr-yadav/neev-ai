@@ -19,13 +19,43 @@ const progressSchema = new mongoose.Schema({
     of: Number,
     default: {},
   },
+  quizAttempts: {
+    type: Map,
+    of: new mongoose.Schema({
+      score: Number,
+      attempts: { type: Number, default: 1 },
+      lastAttemptAt: { type: Date, default: Date.now },
+    }, { _id: false }),
+    default: {},
+  },
   finalQuizScore: {
     type: Number,
+    default: null,
+  },
+  finalQuizAttempts: {
+    type: Number,
+    default: 0,
+  },
+  finalQuizLastAt: {
+    type: Date,
     default: null,
   },
   projectCompleted: {
     type: Boolean,
     default: false,
+  },
+  completedProjects: {
+    type: [String],
+    default: [],
+  },
+  assignmentResponses: {
+    type: Map,
+    of: new mongoose.Schema({
+      responses: { type: mongoose.Schema.Types.Mixed, default: {} },
+      savedAt: { type: Date, default: Date.now },
+      submitted: { type: Boolean, default: false },
+    }, { _id: false }),
+    default: {},
   },
   lastAccessedTopic: {
     type: Number,

@@ -22,7 +22,7 @@ export default function Quiz16_Safety({ onComplete }) {
     if (correct) setScore(s => s + 1)
     setTimeout(() => {
       if (current < questions.length - 1) { setCurrent(c => c + 1); setSelected(null) }
-      else { setDone(true); if (score + (correct ? 1 : 0) >= 3) onComplete() }
+      else { const finalScore = score + (correct ? 1 : 0); setDone(true); onComplete(finalScore) }
     }, 1000)
   }
 

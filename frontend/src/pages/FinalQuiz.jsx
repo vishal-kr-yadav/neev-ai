@@ -275,7 +275,7 @@ function SliderQ({ q, onAnswer }) {
 export default function FinalQuiz() {
   const { courseId } = useParams()
   const navigate = useNavigate()
-  const { isLoggedIn, loading: authLoading } = useAuth()
+  const { isLoggedIn, loading: authLoading, saveFinalQuiz } = useAuth()
 
   useEffect(() => {
     if (!authLoading && !isLoggedIn) navigate('/login')
@@ -293,6 +293,8 @@ export default function FinalQuiz() {
         setCurrentQ((q) => q + 1)
       } else {
         setDone(true)
+        const finalScore = newAnswers.filter(Boolean).length
+        if (isLoggedIn) saveFinalQuiz(courseId, finalScore).catch(() => {})
       }
     }, 800)
   }

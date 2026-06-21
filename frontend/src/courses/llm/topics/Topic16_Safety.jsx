@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const biasExamples = [
   {
@@ -175,6 +176,17 @@ export default function Topic16_Safety() {
 
       {/* Section 1: Bias in AI */}
       <SectionBlock icon="⚖️" title="Bias in AI" color="#4f46e5">
+        <HindiExplainer
+          concept="AI सेफ़्टी"
+          english="AI Safety & Ethics"
+          explanation="AI powerful है लेकिन ख़तरनाक भी हो सकता है — fake news बना सकता है, bias दिखा सकता है, privacy तोड़ सकता है। इसलिए AI safety ज़रूरी है — ये ensure करना कि AI इंसानों की मदद करे, नुकसान नहीं।"
+          example="जैसे गाड़ी powerful है लेकिन बिना brakes, seatbelt, और traffic rules के ख़तरनाक है। AI के लिए भी 'brakes' (guardrails), 'seatbelt' (safety filters), और 'traffic rules' (regulations) ज़रूरी हैं।"
+          terms={[
+            { hindi: 'बायस', english: 'Bias', meaning: 'AI का किसी group के प्रति unfair होना — training data से आता है' },
+            { hindi: 'अलाइनमेंट', english: 'Alignment', meaning: 'AI को इंसानी values के हिसाब से चलाना' },
+            { hindi: 'गार्डरेल', english: 'Guardrail', meaning: 'safety की दीवार — AI को ग़लत काम करने से रोकती है' },
+          ]}
+        />
         <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20 }}>
           AI models learn from human data, which reflects real-world biases. If training data contains stereotypes, the model will reproduce them.
         </p>

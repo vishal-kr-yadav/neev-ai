@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
 import TransformerScene from '../../../components/three/TransformerScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ================================================================
    TOPIC 3 — Transformer Architecture (Deep Dive)
@@ -346,6 +347,18 @@ export default function Topic3_Transformer() {
           message="Welcome to the Transformer — the most important architecture in modern AI! Every model you've heard of (GPT-4, Claude, Gemini, Llama) is built on this. I'll break down every single component with diagrams and real examples. Let's go deep! 🏗️"
         />
       </div>
+
+      <HindiExplainer
+        concept="ट्रांसफ़ॉर्मर"
+        english="Transformer Architecture"
+        explanation="Transformer वो engine है जो हर modern AI (GPT, Claude, Gemini) को चलाता है। ये एक special design है जो एक साथ पूरे sentence को देख सकता है — पुराने AI एक-एक शब्द पढ़ते थे।"
+        example="सोचिए पुराना AI एक अंधे आदमी जैसा था — एक-एक शब्द छूकर समझता था। Transformer एक ऐसा आदमी है जो पूरा page एक नज़र में पढ़ लेता है — इसलिए बहुत तेज़ और smart है!"
+        terms={[
+          { hindi: 'लेयर', english: 'Layer', meaning: 'processing का एक चरण — GPT-4 में 120+ layers हैं' },
+          { hindi: 'एन्कोडर', english: 'Encoder', meaning: 'input को समझने वाला हिस्सा' },
+          { hindi: 'डिकोडर', english: 'Decoder', meaning: 'output generate करने वाला हिस्सा' },
+        ]}
+      />
 
       {/* 3D Scene */}
       <SectionBlock icon="🌐" title="3D Transformer Visualization" color="#4f46e5">

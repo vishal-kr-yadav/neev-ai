@@ -10,12 +10,14 @@
 */
 
 import llmCourse from './llm'
+import devopsCourse from './devops'
 import cvCourse from './cv'
 import rlCourse from './rl'
 
 // All courses — order here = display order on Home page
 export const courses = [
   llmCourse,
+  devopsCourse,
   cvCourse,
   rlCourse,
 ]

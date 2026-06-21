@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import TokenBlocksScene from '../../../components/three/TokenBlocksScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const tokenColors = [
   '#4f46e5', '#0ea5e9', '#ec4899', '#f59e0b', '#10b981',
@@ -36,6 +37,18 @@ export default function Topic2_Tokenization() {
           🖱️ Drag to orbit. Each 3D block is a token — the building blocks an LLM reads.
         </p>
       </div>
+
+      <HindiExplainer
+        concept="टोकनाइज़ेशन"
+        english="Tokenization"
+        explanation="AI को सीधे शब्द नहीं समझ आते — पहले हर शब्द को छोटे टुकड़ों (tokens) में तोड़ना पड़ता है। 'understanding' = 'under' + 'stand' + 'ing' जैसे। हर token का एक number होता है।"
+        example="जैसे Lego blocks से कोई भी shape बना सकते हैं — tokens भी भाषा के Lego blocks हैं! 'खुशी' = 'खु' + 'शी' — AI इन्हीं blocks को जोड़-तोड़कर भाषा समझता है।"
+        terms={[
+          { hindi: 'टोकन', english: 'Token', meaning: 'शब्द का छोटा टुकड़ा — AI की भाषा की इकाई' },
+          { hindi: 'शब्दकोश', english: 'Vocabulary', meaning: 'AI को जितने tokens पता हैं — usually 50,000+' },
+          { hindi: 'एन्कोडिंग', english: 'Encoding', meaning: 'text को numbers में बदलना' },
+        ]}
+      />
 
       {/* Analogy: language as lego */}
       <div style={{

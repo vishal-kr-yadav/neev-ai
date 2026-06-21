@@ -78,7 +78,14 @@ router.put('/:courseId/quiz', async (req, res) => {
 
     let progress = await Progress.findOneAndUpdate(
       { user: req.userId, courseId: req.params.courseId },
-      { $set: { [`quizScores.${topicIndex}`]: score } },
+      {
+        $set: {
+          [`quizScores.${topicIndex}`]: score,
+          [`quizAttempts.${topicIndex}.score`]: score,
+          [`quizAttempts.${topicIndex}.lastAttemptAt`]: new Date(),
+        },
+        $inc: { [`quizAttempts.${topicIndex}.attempts`]: 1 },
+      },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     )
 
@@ -96,7 +103,11 @@ router.put('/:courseId/final-quiz', async (req, res) => {
 
     const progress = await Progress.findOneAndUpdate(
       { user: req.userId, courseId: req.params.courseId },
-      { finalQuizScore: score },
+      {
+        finalQuizScore: score,
+        finalQuizLastAt: new Date(),
+        $inc: { finalQuizAttempts: 1 },
+      },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     )
 
@@ -106,16 +117,72 @@ router.put('/:courseId/final-quiz', async (req, res) => {
   }
 })
 
-// PUT /api/progress/:courseId/project — mark project complete
+// PUT /api/progress/:courseId/project — mark project complete (supports multi-project)
 router.put('/:courseId/project', async (req, res) => {
   try {
+    const { projectId } = req.body
+    const updateObj = { projectCompleted: true, completedAt: new Date() }
+
+    if (projectId) {
+      updateObj.$addToSet = { completedProjects: projectId }
+    }
+
     const progress = await Progress.findOneAndUpdate(
       { user: req.userId, courseId: req.params.courseId },
-      { projectCompleted: true, completedAt: new Date() },
+      updateObj,
       { new: true, upsert: true, setDefaultsOnInsert: true }
     )
 
     res.json({ progress })
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
+// PUT /api/progress/:courseId/assignment — save assignment responses
+router.put('/:courseId/assignment', async (req, res) => {
+  try {
+    const { assignmentId, responses, submitted } = req.body
+
+    if (!assignmentId) {
+      return res.status(400).json({ error: 'assignmentId is required' })
+    }
+
+    const progress = await Progress.findOneAndUpdate(
+      { user: req.userId, courseId: req.params.courseId },
+      {
+        $set: {
+          [`assignmentResponses.${assignmentId}`]: {
+            responses: responses || {},
+            savedAt: new Date(),
+            submitted: submitted || false,
+          },
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    )
+
+    res.json({ progress })
+  } catch (err) {
+    console.error('Save assignment error:', err)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
+// GET /api/progress/:courseId/assignment/:assignmentId — get saved assignment responses
+router.get('/:courseId/assignment/:assignmentId', async (req, res) => {
+  try {
+    const progress = await Progress.findOne({
+      user: req.userId,
+      courseId: req.params.courseId,
+    })
+
+    if (!progress) {
+      return res.json({ responses: null })
+    }
+
+    const assignment = progress.assignmentResponses?.get(req.params.assignmentId)
+    res.json({ assignment: assignment || null })
   } catch (err) {
     res.status(500).json({ error: 'Server error' })
   }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
-const API = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api'
+const API = (import.meta.env.VITE_API_URL || '') + '/api'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -107,21 +107,56 @@ export function AuthProvider({ children }) {
     return (await res.json()).progress
   }
 
-  const completeProject = async (courseId) => {
+  const completeProject = async (courseId, projectId) => {
     if (!token) return null
     const res = await fetch(`${API}/progress/${courseId}/project`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ projectId }),
     })
     if (!res.ok) return null
     return (await res.json()).progress
   }
 
+  const saveAssignment = async (courseId, assignmentId, responses, submitted = false) => {
+    if (!token) return null
+    const res = await fetch(`${API}/progress/${courseId}/assignment`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ assignmentId, responses, submitted }),
+    })
+    if (!res.ok) return null
+    return (await res.json()).progress
+  }
+
+  const getAssignment = async (courseId, assignmentId) => {
+    if (!token) return null
+    const res = await fetch(`${API}/progress/${courseId}/assignment/${assignmentId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return null
+    return (await res.json()).assignment
+  }
+
+  const updateProfile = async (updates) => {
+    if (!token) return null
+    const res = await fetch(`${API}/auth/profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(updates),
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    setUser(data.user)
+    return data.user
+  }
+
   return (
     <AuthContext.Provider value={{
       user, token, loading,
-      register, login, logout,
+      register, login, logout, updateProfile,
       getProgress, getAllProgress, completeTopic, saveQuizScore, saveFinalQuiz, completeProject,
+      saveAssignment, getAssignment,
       isLoggedIn: !!user,
     }}>
       {children}

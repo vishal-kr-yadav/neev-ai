@@ -3,10 +3,10 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 COPY . .
 
-EXPOSE ${PORT:-5000}
+EXPOSE 5001
 
 CMD ["node", "server.js"]

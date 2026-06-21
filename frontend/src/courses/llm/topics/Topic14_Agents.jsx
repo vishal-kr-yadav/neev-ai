@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ================================================================
    TOPIC 14 — AI Agents & Tool Use
@@ -748,6 +749,17 @@ export default function Topic14_Agents() {
 
       {/* What is an Agent */}
       <SectionBlock icon="🤖" title="What is an AI Agent?" color="#4f46e5">
+        <HindiExplainer
+          concept="AI एजेंट्स"
+          english="AI Agents & Tool Use"
+          explanation="Normal AI सिर्फ़ बात कर सकता है। Agent AI काम भी कर सकता है — internet search कर सकता है, code लिख-run कर सकता है, email भेज सकता है, files पढ़ सकता है। ये AI + tools = Agent।"
+          example="Normal ChatGPT एक librarian है — सवाल पूछो, जवाब देता है। AI Agent एक personal assistant है — बोलो 'flight book करो' तो websites check करता है, prices compare करता है, booking भी कर देता है!"
+          terms={[
+            { hindi: 'टूल यूज़', english: 'Tool Use', meaning: 'AI का बाहरी tools (calculator, search, API) इस्तेमाल करना' },
+            { hindi: 'फ़ंक्शन कॉलिंग', english: 'Function Calling', meaning: 'AI code/functions run करवा सकता है' },
+            { hindi: 'ऑटोनॉमस', english: 'Autonomous', meaning: 'खुद सोचकर, खुद decide करके काम करना' },
+          ]}
+        />
         <Neuron mood="explaining" size="small"
           message="A regular LLM is like a brain in a jar -- smart, but it can't DO anything. An AI Agent is that brain connected to hands, eyes, and tools. It can think, then act on its thoughts."
         />

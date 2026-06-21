@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 /* ================================================================
    TOPIC 13 — Embeddings & Vector Search
@@ -712,6 +713,17 @@ export default function Topic13_Embeddings() {
 
       {/* What Are Embeddings */}
       <SectionBlock icon="📍" title="What Are Embeddings?" color="#4f46e5">
+        <HindiExplainer
+          concept="एम्बेडिंग्स — meaning को numbers में"
+          english="Embeddings & Vectors"
+          explanation="AI शब्दों को numbers की list (vector) में बदलता है — इसे embedding कहते हैं। मज़ेदार बात: जो शब्द meaning में पास हैं, उनके numbers भी पास होते हैं! 'king' और 'queen' के numbers एक-दूसरे के करीब होंगे।"
+          example="सोचिए एक map जहाँ हर शब्द एक point है — 'dog' और 'puppy' पास-पास होंगे, लेकिन 'dog' और 'calculator' बहुत दूर। AI इसी map से समझता है कि कौन से शब्द related हैं!"
+          terms={[
+            { hindi: 'वेक्टर', english: 'Vector', meaning: 'numbers की list — जैसे [0.2, -0.5, 0.8, ...]' },
+            { hindi: 'समानता', english: 'Similarity', meaning: 'दो vectors कितने करीब हैं — करीब = similar meaning' },
+            { hindi: 'डाइमेंशन', english: 'Dimension', meaning: 'vector में कितने numbers हैं — usually 768 या 1536' },
+          ]}
+        />
         <Neuron mood="explaining" size="small"
           message="Think of embeddings as GPS coordinates -- but for meaning. Every word gets a location in 'meaning-space'. Words with similar meanings end up close together, like houses in the same neighborhood."
         />

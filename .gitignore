@@ -5,3 +5,6 @@ dist
 .DS_Store
 Thumbs.db
 venv
+deploy.py
+deploy_key.py
+.claude/

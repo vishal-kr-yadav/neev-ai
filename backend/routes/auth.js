@@ -61,10 +61,17 @@ router.post('/login', [
       return res.status(400).json({ error: 'Invalid email or password' })
     }
 
+    if (user.isBlocked) {
+      return res.status(403).json({ error: 'Your account has been blocked. Contact admin.' })
+    }
+
     const isMatch = await user.comparePassword(password)
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid email or password' })
     }
+
+    user.lastLogin = new Date()
+    await user.save()
 
     const token = generateToken(user._id)
     res.json({ token, user })
@@ -81,6 +88,35 @@ router.get('/me', auth, async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' })
     res.json({ user })
   } catch (err) {
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
+// PUT /api/auth/profile — update user profile
+router.put('/profile', auth, [
+  body('name').optional().trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
+  body('phone').optional().trim(),
+  body('age').optional().isInt({ min: 5, max: 120 }),
+  body('profession').optional().trim(),
+], async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ error: errors.array()[0].msg })
+  }
+
+  try {
+    const updates = {}
+    const allowed = ['name', 'phone', 'age', 'profession']
+    allowed.forEach(field => {
+      if (req.body[field] !== undefined) updates[field] = req.body[field]
+    })
+
+    const user = await User.findByIdAndUpdate(req.userId, updates, { new: true })
+    if (!user) return res.status(404).json({ error: 'User not found' })
+
+    res.json({ user })
+  } catch (err) {
+    console.error('Profile update error:', err)
     res.status(500).json({ error: 'Server error' })
   }
 })

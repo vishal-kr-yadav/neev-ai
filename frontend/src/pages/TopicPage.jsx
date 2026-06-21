@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, CheckCircle, Sparkles, Home, Wrench, PanelLeftOpen, PanelLeftClose } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CheckCircle, Sparkles, Home, Wrench, PanelLeftOpen, PanelLeftClose, ClipboardList } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { getCourse } from '../courses'
 import { useAuth } from '../context/AuthContext'
@@ -10,7 +10,7 @@ import styles from './TopicPage.module.css'
 export default function TopicPage() {
   const { courseId, topicId } = useParams()
   const navigate = useNavigate()
-  const { isLoggedIn, loading: authLoading, getProgress, completeTopic: apiCompleteTopic } = useAuth()
+  const { isLoggedIn, loading: authLoading, getProgress, completeTopic: apiCompleteTopic, saveQuizScore } = useAuth()
   const course = getCourse(courseId)
   const idx = parseInt(topicId) - 1
   const topic = course?.topics[idx]
@@ -58,10 +58,13 @@ export default function TopicPage() {
     return null
   }
 
-  const markComplete = () => {
+  const markComplete = (score) => {
     if (!completedTopics.includes(idx)) {
       setCompletedTopics([...completedTopics, idx])
       if (isLoggedIn) apiCompleteTopic(courseId, idx).catch(() => {})
+    }
+    if (score !== undefined && isLoggedIn) {
+      saveQuizScore(courseId, idx, score).catch(() => {})
     }
     setQuizCompleted(true)
   }
@@ -130,7 +133,7 @@ export default function TopicPage() {
         {/* Left Sidebar */}
         <aside className={`${styles.sidebar} ${!sidebarOpen ? styles.sidebarHidden : ''}`}>
           <div className={styles.sidebarSection}>
-            <div className={styles.sidebarSectionLabel}>Fundamentals</div>
+            <div className={styles.sidebarSectionLabel}>Fundamentals · Day 1–3</div>
           </div>
           {fundamentals.map((t, i) => {
             const isActive = i === idx
@@ -151,7 +154,7 @@ export default function TopicPage() {
             <>
               <div className={styles.sidebarDivider} />
               <div className={styles.sidebarSection}>
-                <div className={styles.sidebarSectionLabel}>Advanced</div>
+                <div className={styles.sidebarSectionLabel}>Advanced · Day 4–7</div>
               </div>
               {advanced.map((t, i) => {
                 const realIdx = i + 8
@@ -175,10 +178,29 @@ export default function TopicPage() {
           <button className={styles.sidebarSpecial} onClick={() => navigate(`/course/${courseId}/final-quiz`)}>
             <Sparkles size={16} /> Final Quiz
           </button>
-          {hasProject && (
+          {course.projects?.length > 1 ? (
+            course.projects.map(p => (
+              <button key={p.id} className={styles.sidebarSpecial} onClick={() => navigate(`/course/${courseId}/project/${p.id}`)}>
+                <Wrench size={16} /> {p.icon} {p.title}
+              </button>
+            ))
+          ) : hasProject && (
             <button className={styles.sidebarSpecial} onClick={() => navigate(`/course/${courseId}/project`)}>
               <Wrench size={16} /> {course.project.title}
             </button>
+          )}
+          {course.assignments?.length > 0 && (
+            <>
+              <div className={styles.sidebarDivider} />
+              <div style={{ padding: '4px 16px', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1 }}>
+                Assignments
+              </div>
+              {course.assignments.map(a => (
+                <button key={a.id} className={styles.sidebarSpecial} onClick={() => navigate(`/course/${courseId}/assignment/${a.id}`)}>
+                  <ClipboardList size={16} /> {a.icon} {a.title}
+                </button>
+              ))}
+            </>
           )}
         </aside>
 
@@ -191,6 +213,8 @@ export default function TopicPage() {
                   <div className={styles.topicBannerInner}>
                     <div className={styles.topicMeta}>
                       <span className={styles.topicNum}>Topic {idx + 1} of {topics.length}</span>
+                      {topic.duration && <span style={{ fontSize: 12, color: 'var(--text-muted)', marginLeft: 8 }}>⏱ {topic.duration}</span>}
+                      {topic.day && <span style={{ fontSize: 12, color: 'var(--accent)', marginLeft: 8, fontWeight: 600 }}>Day {topic.day}</span>}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                       <span className={styles.topicIcon}>{topic.icon}</span>

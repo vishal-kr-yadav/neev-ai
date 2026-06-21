@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Brain, Sparkles, ArrowRight, Eye, Zap, BookOpen, Clock, Award, Play, Users, BarChart3, Lightbulb, LogOut, User } from 'lucide-react'
+import { Brain, Sparkles, ArrowRight, Eye, Zap, BookOpen, Clock, Award, Play, Users, BarChart3, Lightbulb, LogOut, User, Shield, Container } from 'lucide-react'
 import { courses as courseRegistry } from '../courses'
 import { useAuth } from '../context/AuthContext'
 import Logo from '../components/Logo'
 import styles from './Home.module.css'
 
-const courseIcons = { llm: <Brain size={28} />, cv: <Eye size={28} />, rl: <Zap size={28} /> }
+const courseIcons = { llm: <Brain size={28} />, devops: <Container size={28} />, cv: <Eye size={28} />, rl: <Zap size={28} /> }
 
 const features = [
   {
@@ -75,6 +75,11 @@ export default function Home() {
                 <button className={styles.navLink} onClick={() => navigate('/community')}>
                   Q&A
                 </button>
+                {user?.role === 'admin' && (
+                  <button className={styles.navLink} onClick={() => navigate('/admin')} style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#4f46e5' }}>
+                    <Shield size={14} /> Admin
+                  </button>
+                )}
                 <button className={styles.navCta} onClick={() => navigate('/dashboard')}>
                   Dashboard
                 </button>
@@ -142,20 +147,20 @@ export default function Home() {
 
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>8</div>
+              <div className={styles.heroStatNum}>24+</div>
               <div className={styles.heroStatLabel}>Interactive Topics</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>8</div>
+              <div className={styles.heroStatNum}>24+</div>
               <div className={styles.heroStatLabel}>Unique Quizzes</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>6+</div>
-              <div className={styles.heroStatLabel}>3D Visualizations</div>
+              <div className={styles.heroStatNum}>6</div>
+              <div className={styles.heroStatLabel}>Case Studies</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>100%</div>
-              <div className={styles.heroStatLabel}>Hands-On</div>
+              <div className={styles.heroStatNum}>1 Week</div>
+              <div className={styles.heroStatLabel}>Per Course</div>
             </div>
           </div>
         </motion.div>
@@ -238,7 +243,7 @@ export default function Home() {
                   {course.available && (
                     <div className={styles.courseCardMeta}>
                       <span className={styles.courseCardMetaItem}>
-                        <BookOpen size={14} /> {course.topics.length} topics{course.project ? ' + project' : ''}
+                        <BookOpen size={14} /> {course.topics.length} topics{course.assignments?.length ? ` + ${course.assignments.length} assignments` : ''}{course.project ? ' + project' : ''}
                       </span>
                       <span className={styles.courseCardMetaItem}>
                         <Clock size={14} /> {course.duration}

@@ -6,6 +6,8 @@ require('dotenv').config()
 const authRoutes = require('./routes/auth')
 const progressRoutes = require('./routes/progress')
 const questionRoutes = require('./routes/questions')
+const adminRoutes = require('./routes/admin')
+const ragRoutes = require('./routes/rag')
 
 const app = express()
 
@@ -17,6 +19,8 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/progress', progressRoutes)
 app.use('/api/questions', questionRoutes)
+app.use('/api/admin', adminRoutes)
+app.use('/api/rag', ragRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))

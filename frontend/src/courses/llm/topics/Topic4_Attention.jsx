@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import AttentionBeamsScene from '../../../components/three/AttentionBeamsScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const sentence = ['The', 'cat', 'sat', 'on', 'the', 'mat']
 const attentionMap = {
@@ -25,6 +26,18 @@ export default function Topic4_Attention() {
           🖱️ Orbit to see attention beams. Thicker/brighter beams = more attention. "cat" focuses most on "sat" and itself.
         </p>
       </div>
+
+      <HindiExplainer
+        concept="अटेंशन मैकेनिज़्म"
+        english="Attention Mechanism"
+        explanation="Attention AI को बताता है कि किस शब्द पर ज़्यादा ध्यान देना है। 'The cat sat on the mat because it was tired' — यहाँ 'it' किसकी बात कर रहा है? Attention समझता है कि 'it' = 'cat'।"
+        example="जैसे class में teacher बोल रहे हैं और आप important points पर ज़्यादा ध्यान देते हैं, बाकी background noise ignore करते हैं — Attention भी ऐसे ही काम करता है। हर शब्द को decide करता है कि किन शब्दों पर focus करना है।"
+        terms={[
+          { hindi: 'सेल्फ़-अटेंशन', english: 'Self-Attention', meaning: 'हर शब्द बाकी सबसे compare करता है' },
+          { hindi: 'क्वेरी-की-वैल्यू', english: 'Query-Key-Value', meaning: 'search जैसा — Query पूछता है, Key match करता है, Value जवाब देता है' },
+          { hindi: 'मल्टी-हेड', english: 'Multi-Head', meaning: 'कई angles से एक साथ ध्यान देना' },
+        ]}
+      />
 
       {/* Spotlight analogy */}
       <div style={{

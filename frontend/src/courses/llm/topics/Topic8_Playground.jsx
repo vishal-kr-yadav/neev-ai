@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import PlaygroundScene from '../../../components/three/PlaygroundScene'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const wordChains = {
   the: ['cat', 'dog', 'model', 'transformer', 'AI', 'data'],
@@ -112,6 +113,18 @@ export default function Topic8_Playground() {
           {isGen ? '⏳ Generating...' : '⚡ Auto-Generate'}
         </motion.button>
       </div>
+
+      <HindiExplainer
+        concept="टेम्परेचर — AI की creativity"
+        english="Temperature & Randomness"
+        explanation="Temperature एक setting है जो AI को creative या strict बनाती है। Low temperature (0.1) = हमेशा safe, same जवाब। High temperature (1.0) = creative, अलग-अलग जवाब — लेकिन कभी-कभी अजीब भी।"
+        example="जैसे cooking में masala: कम masala = simple, safe taste (low temp)। ज़्यादा masala = exciting, different taste — पर कभी-कभी बिगड़ भी सकता है (high temp)। Code लिखवाना हो तो low temp रखो, कहानी लिखवानी हो तो high temp!"
+        terms={[
+          { hindi: 'टेम्परेचर', english: 'Temperature', meaning: '0 से 1 — कम = strict, ज़्यादा = creative' },
+          { hindi: 'टॉप-P', english: 'Top-P', meaning: 'कितने options में से चुनना है — 0.1 = safe choices only' },
+          { hindi: 'मैक्स टोकन', english: 'Max Tokens', meaning: 'AI कितना लंबा जवाब दे सकता है' },
+        ]}
+      />
 
       {/* Temperature */}
       <div style={{

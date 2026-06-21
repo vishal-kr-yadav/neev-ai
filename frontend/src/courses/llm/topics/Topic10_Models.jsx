@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const models = [
   {
@@ -136,6 +137,17 @@ export default function Topic10_Models() {
 
       {/* Section 1: Model Cards */}
       <SectionBlock icon="🏆" title="Major LLM Models" color="#4f46e5">
+        <HindiExplainer
+          concept="बड़े AI मॉडल्स"
+          english="Major LLM Models"
+          explanation="आज कई companies ने अपने AI बनाए हैं — OpenAI का GPT-4, Anthropic का Claude, Google का Gemini, Meta का Llama। सब अलग-अलग चीज़ों में अच्छे हैं — कोई coding में, कोई writing में, कोई reasoning में।"
+          example="जैसे phone market में Samsung, Apple, OnePlus सब हैं — सबकी अपनी ख़ासियत है। AI models भी ऐसे ही हैं — GPT-4 coding में strong, Claude लंबे documents में, Gemini Google search के साथ काम करता है।"
+          terms={[
+            { hindi: 'GPT', english: 'GPT', meaning: 'OpenAI का model — ChatGPT इसी पर चलता है' },
+            { hindi: 'Claude', english: 'Claude', meaning: 'Anthropic का model — safety पर ज़ोर' },
+            { hindi: 'ओपन-सोर्स', english: 'Open Source', meaning: 'free model जो कोई भी use/modify कर सकता है — जैसे Llama' },
+          ]}
+        />
         <p style={{ fontSize: 17, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 24 }}>
           Click on any model to explore its architecture, strengths, weaknesses, and ideal use cases:
         </p>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import AnimatedSequence from '../../../components/AnimatedSequence'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const halluFrames = [
   {
@@ -87,6 +88,18 @@ export default function Topic7_Hallucinations() {
       <div style={{ marginBottom: 32 }}>
         <AnimatedSequence frames={halluFrames} interval={5000} />
       </div>
+
+      <HindiExplainer
+        concept="हैलुसिनेशन — AI का झूठ"
+        english="Hallucinations"
+        explanation="कभी-कभी AI बड़े confidence से ग़लत बात बोल देता है — ये hallucination है। AI को नहीं पता कि वो सच बोल रहा है या झूठ — वो बस 'अगला शब्द predict' कर रहा है जो सही लगता है।"
+        example="AI से पूछो 'Dr. Sharma की किताब का नाम बताओ' — AI एक किताब का नाम बना देगा जो exist ही नहीं करती! जैसे कोई student exam में answer नहीं आता तो confident face के साथ कुछ भी लिख देता है — AI भी ऐसा ही करता है 😄"
+        terms={[
+          { hindi: 'हैलुसिनेशन', english: 'Hallucination', meaning: 'AI का confident तरीके से ग़लत बात बोलना' },
+          { hindi: 'ग्राउंडिंग', english: 'Grounding', meaning: 'AI को real data से जोड़ना ताकि झूठ कम बोले' },
+          { hindi: 'फ़ैक्ट-चेकिंग', english: 'Fact-checking', meaning: 'AI के जवाब की सच्चाई जाँचना — ज़रूरी है!' },
+        ]}
+      />
 
       {/* Visual: confidence vs accuracy */}
       <div style={{

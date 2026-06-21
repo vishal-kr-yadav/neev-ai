@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const openModels = [
   { name: 'Llama 3.1', org: 'Meta', params: '405B', license: 'Llama License', color: '#4f46e5' },
@@ -161,6 +162,17 @@ export default function Topic15_OpenVsClosed() {
 
       {/* Section 1: What does Open vs Closed mean? */}
       <SectionBlock icon="🔓" title="What Does Open vs Closed Mean?" color="#4f46e5">
+        <HindiExplainer
+          concept="Open vs Closed Source AI"
+          english="Open vs Closed Source Models"
+          explanation="Closed source (GPT-4, Claude) = company का secret recipe, API से use करो, अंदर क्या है पता नहीं। Open source (Llama, Mistral) = recipe public है, download करो, modify करो, अपने server पर चलाओ।"
+          example="Closed source = Domino's Pizza — order करो, खाओ, recipe secret है। Open source = YouTube पर recipe देखो, घर पर बनाओ, अपने हिसाब से modify करो। दोनों के अपने फ़ायदे हैं!"
+          terms={[
+            { hindi: 'ओपन सोर्स', english: 'Open Source', meaning: 'free, public — कोई भी download/modify कर सकता है' },
+            { hindi: 'API', english: 'API', meaning: 'internet से AI use करना — pay per use' },
+            { hindi: 'सेल्फ़-होस्ट', english: 'Self-Host', meaning: 'अपने computer/server पर AI चलाना' },
+          ]}
+        />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20, marginBottom: 28 }}>
           {/* Open Source Card */}
           <motion.div

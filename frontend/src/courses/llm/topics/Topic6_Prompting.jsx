@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import AnimatedSequence from '../../../components/AnimatedSequence'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const promptFrames = [
   {
@@ -89,6 +90,18 @@ export default function Topic6_Prompting() {
       <div style={{ marginBottom: 32 }}>
         <AnimatedSequence frames={promptFrames} interval={4500} />
       </div>
+
+      <HindiExplainer
+        concept="प्रॉम्प्ट इंजीनियरिंग"
+        english="Prompt Engineering"
+        explanation="AI से बात करने का तरीका ही prompt engineering है। अच्छा prompt = अच्छा जवाब। बुरा prompt = बकवास जवाब। ये एक skill है — AI से सही तरीके से पूछना कि वो best result दे।"
+        example="जैसे Google पर search करते वक़्त 'best restaurant' लिखोगे तो random results आएँगे, लेकिन 'best south Indian restaurant in Pune under 500 for family' लिखोगे तो perfect result मिलेगा। AI के साथ भी ऐसा ही है!"
+        terms={[
+          { hindi: 'ज़ीरो-शॉट', english: 'Zero-shot', meaning: 'बिना example दिए सीधे पूछना' },
+          { hindi: 'फ़्यू-शॉट', english: 'Few-shot', meaning: '2-3 examples देकर पूछना — AI बेहतर समझता है' },
+          { hindi: 'चेन ऑफ़ थॉट', english: 'Chain of Thought', meaning: 'AI को step-by-step सोचने को बोलना' },
+        ]}
+      />
 
       {/* Technique comparison */}
       <div style={{

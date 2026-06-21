@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircleQuestion, X, Send, ExternalLink } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-const API = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api'
+const API = (import.meta.env.VITE_API_URL || '') + '/api'
 const TAGS = ['llm', 'transformer', 'attention', 'tokenization', 'training', 'prompting', 'agents', 'embeddings', 'diffusion', 'safety', 'general']
 
 /*

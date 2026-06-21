@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Neuron, { NeuronTip, SectionBlock, InteractiveDemo } from '../../../components/Neuron'
+import HindiExplainer from '../../../components/HindiExplainer'
 
 const pipelineSteps = [
   {
@@ -187,6 +188,17 @@ export default function Topic9_FineTuning() {
 
       {/* Section 1: What is Fine-Tuning? */}
       <SectionBlock icon="🎓" title="What is Fine-Tuning?" color="#4f46e5">
+        <HindiExplainer
+          concept="फ़ाइन-ट्यूनिंग"
+          english="Fine-Tuning & RLHF"
+          explanation="Base LLM सब कुछ जानता है लेकिन बात करने का तरीका अजीब होता है। Fine-tuning में उसे specific काम सिखाते हैं — जैसे customer support, coding, या medical advice। RLHF में इंसान बताते हैं 'ये जवाब अच्छा था, ये बुरा' — AI सीखता जाता है।"
+          example="जैसे MBBS पूरा करने के बाद भी doctor को specialization करनी पड़ती है — eye specialist, heart specialist। LLM भी पहले general पढ़ाई करता है (pre-training), फिर specific काम सीखता है (fine-tuning)!"
+          terms={[
+            { hindi: 'बेस मॉडल', english: 'Base Model', meaning: 'general AI — सब जानता है पर specialist नहीं' },
+            { hindi: 'RLHF', english: 'RLHF', meaning: 'इंसानों की feedback से सीखना — Reinforcement Learning from Human Feedback' },
+            { hindi: 'LoRA', english: 'LoRA', meaning: 'सस्ता fine-tuning — पूरे model को बदलने की ज़रूरत नहीं' },
+          ]}
+        />
         <p style={{ fontSize: 17, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 24 }}>
           Fine-tuning is the process of taking a pre-trained language model and training it further on a smaller, specialized dataset to make it better at specific tasks.
         </p>

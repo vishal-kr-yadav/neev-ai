@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { LogOut, BookOpen, CheckCircle, Trophy, Clock, ArrowRight, Wrench, Home, BarChart3, Flame } from 'lucide-react'
+import { LogOut, BookOpen, CheckCircle, Trophy, Clock, ArrowRight, Wrench, Home, BarChart3, Flame, ClipboardList } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import Logo from '../components/Logo'
 import { courses as courseRegistry } from '../courses'
@@ -164,9 +164,11 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <div className={styles.topicItemLabel}>{t.icon} {t.title}</div>
-                        {score !== undefined && (
-                          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>Quiz: {score}/5</div>
-                        )}
+                        <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+                          {t.duration && <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>⏱ {t.duration}</span>}
+                          {t.day && <span style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600 }}>Day {t.day}</span>}
+                          {score !== undefined && <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Quiz: {score}/5</span>}
+                        </div>
                       </div>
                     </div>
                   )
@@ -182,24 +184,51 @@ export default function Dashboard() {
               </motion.button>
 
               {/* Project + Final Quiz status */}
-              {(course.project || true) && (
-                <div style={{ display: 'flex', gap: 14, marginTop: 16 }}>
+              <div style={{ display: 'flex', gap: 14, marginTop: 16 }}>
+                <div style={{ padding: '10px 18px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg-primary)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                  onClick={() => navigate(`/course/${course.id}/final-quiz`)}>
+                  <Trophy size={14} color={progress?.finalQuizScore != null ? '#f59e0b' : 'var(--text-muted)'} />
+                  <span style={{ color: 'var(--text-secondary)' }}>
+                    Final Quiz {progress?.finalQuizScore != null ? `— ${progress.finalQuizScore}/10` : ''}
+                  </span>
+                </div>
+                {course.projects?.length > 1 ? (
+                  course.projects.map(p => (
+                    <div key={p.id} style={{ padding: '10px 18px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg-primary)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                      onClick={() => navigate(`/course/${course.id}/project/${p.id}`)}>
+                      <Wrench size={14} color="var(--text-muted)" />
+                      <span style={{ color: 'var(--text-secondary)' }}>{p.icon} {p.title}</span>
+                    </div>
+                  ))
+                ) : course.project && (
                   <div style={{ padding: '10px 18px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg-primary)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
-                    onClick={() => navigate(`/course/${course.id}/final-quiz`)}>
-                    <Trophy size={14} color={progress?.finalQuizScore != null ? '#f59e0b' : 'var(--text-muted)'} />
+                    onClick={() => navigate(`/course/${course.id}/project`)}>
+                    <Wrench size={14} color={progress?.projectCompleted ? '#10b981' : 'var(--text-muted)'} />
                     <span style={{ color: 'var(--text-secondary)' }}>
-                      Final Quiz {progress?.finalQuizScore != null ? `— ${progress.finalQuizScore}/10` : ''}
+                      {course.project.title} {progress?.projectCompleted ? '✅' : ''}
                     </span>
                   </div>
-                  {course.project && (
-                    <div style={{ padding: '10px 18px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg-primary)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
-                      onClick={() => navigate(`/course/${course.id}/project`)}>
-                      <Wrench size={14} color={progress?.projectCompleted ? '#10b981' : 'var(--text-muted)'} />
-                      <span style={{ color: 'var(--text-secondary)' }}>
-                        {course.project.title} {progress?.projectCompleted ? '✅' : ''}
-                      </span>
-                    </div>
-                  )}
+                )}
+              </div>
+
+              {course.assignments?.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    Case Study Assignments
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    {course.assignments.map(a => (
+                      <div key={a.id}
+                        style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg-primary)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', transition: 'all 0.2s' }}
+                        onClick={() => navigate(`/course/${course.id}/assignment/${a.id}`)}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-lighter)' }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-primary)' }}>
+                        <ClipboardList size={14} color="var(--text-muted)" />
+                        <span style={{ color: 'var(--text-secondary)' }}>{a.icon} {a.title}</span>
+                        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{a.duration}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </motion.div>
