@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ─── DATA ─── */
 const DEFECTS = [
@@ -228,6 +229,7 @@ export default function Assignment1_PaintLine() {
               An LLM judge will evaluate your responses and provide detailed feedback on your reasoning.
             </p>
           </div>
+          <AIEvaluationPanel courseId="cv" assignmentId={1} />
         </motion.div>
       </div>
     )

@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Brain, Sparkles, ArrowRight, Eye, Zap, BookOpen, Clock, Award, Play, Users, BarChart3, Lightbulb, LogOut, User, Shield, Container } from 'lucide-react'
+import { Brain, Sparkles, ArrowRight, Eye, Zap, BookOpen, Clock, Award, Play, Users, BarChart3, Lightbulb, LogOut, User, Shield, Container, Settings } from 'lucide-react'
 import { courses as courseRegistry } from '../courses'
 import { useAuth } from '../context/AuthContext'
 import Logo from '../components/Logo'
 import styles from './Home.module.css'
 
-const courseIcons = { llm: <Brain size={28} />, devops: <Container size={28} />, cv: <Eye size={28} />, rl: <Zap size={28} /> }
+const courseIcons = { llm: <Brain size={28} />, devops: <Container size={28} />, cv: <Eye size={28} />, scale: <BarChart3 size={28} />, rl: <Zap size={28} />, dsa: <Lightbulb size={28} />, pdm: <Settings size={28} /> }
 
 const features = [
   {
@@ -147,19 +147,19 @@ export default function Home() {
 
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>24+</div>
+              <div className={styles.heroStatNum}>120+</div>
               <div className={styles.heroStatLabel}>Interactive Topics</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>24+</div>
+              <div className={styles.heroStatNum}>120+</div>
               <div className={styles.heroStatLabel}>Unique Quizzes</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>6</div>
+              <div className={styles.heroStatNum}>24</div>
               <div className={styles.heroStatLabel}>Case Studies</div>
             </div>
             <div className={styles.heroStat}>
-              <div className={styles.heroStatNum}>1 Week</div>
+              <div className={styles.heroStatNum}>1-2 Weeks</div>
               <div className={styles.heroStatLabel}>Per Course</div>
             </div>
           </div>

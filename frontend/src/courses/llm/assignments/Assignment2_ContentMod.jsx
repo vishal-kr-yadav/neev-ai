@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HindiExplainer from '../../../components/HindiExplainer'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ─── DATA ─── */
 const REGULATORY_REQUIREMENTS = [
@@ -320,6 +321,7 @@ export default function Assignment2_ContentMod() {
               An LLM judge will evaluate your responses across regulatory understanding, content taxonomy design, prompt quality, gray area handling, multilingual strategy, human review workflows, and monitoring readiness. Detailed feedback coming soon.
             </p>
           </div>
+          <AIEvaluationPanel courseId="llm" assignmentId={2} />
         </motion.div>
       </div>
     )

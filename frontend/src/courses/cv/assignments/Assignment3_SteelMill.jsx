@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ================================================================
    ASSIGNMENT 3 — Steel Mill Continuous Improvement
@@ -693,6 +694,7 @@ export default function Assignment3_SteelMill() {
                   Scoring: Coming Soon -- An LLM judge will evaluate your responses and provide detailed feedback.
                 </p>
               </div>
+              <AIEvaluationPanel courseId="cv" assignmentId={3} />
             </motion.div>
           ) : (
             <>

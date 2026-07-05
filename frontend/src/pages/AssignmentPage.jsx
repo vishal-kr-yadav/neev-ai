@@ -11,6 +11,17 @@ import Assignment3_SteelMill from '../courses/cv/assignments/Assignment3_SteelMi
 import Assignment1_BankChatbot from '../courses/llm/assignments/Assignment1_BankChatbot'
 import Assignment2_ContentMod from '../courses/llm/assignments/Assignment2_ContentMod'
 import Assignment3_LegalDocs from '../courses/llm/assignments/Assignment3_LegalDocs'
+import ScaleAssignment1_RAG from '../courses/scale/assignments/Assignment1_ScaleRAG'
+import ScaleAssignment2_Deploy from '../courses/scale/assignments/Assignment2_DeployProd'
+import ScaleAssignment3_Git from '../courses/scale/assignments/Assignment3_GitWorkflow'
+import ScaleAssignment4_Database from '../courses/scale/assignments/Assignment4_DatabaseScaling'
+import DSAAssignment1_Sort from '../courses/dsa/assignments/Assignment1_SortWarehouse'
+import DSAAssignment2_Nav from '../courses/dsa/assignments/Assignment2_NavigationSystem'
+import DSAAssignment3_Social from '../courses/dsa/assignments/Assignment3_SocialNetwork'
+import DSAAssignment4_SQL from '../courses/dsa/assignments/Assignment4_ECommerceSQL'
+import PdMAssignment1_Steel from '../courses/pdm/assignments/Assignment1_SteelPlant'
+import PdMAssignment2_Wind from '../courses/pdm/assignments/Assignment2_WindTurbine'
+import PdMAssignment3_Metro from '../courses/pdm/assignments/Assignment3_MetroRail'
 
 const assignmentComponents = {
   cv: {
@@ -22,6 +33,23 @@ const assignmentComponents = {
     1: Assignment1_BankChatbot,
     2: Assignment2_ContentMod,
     3: Assignment3_LegalDocs,
+  },
+  scale: {
+    1: ScaleAssignment1_RAG,
+    2: ScaleAssignment2_Deploy,
+    3: ScaleAssignment3_Git,
+    4: ScaleAssignment4_Database,
+  },
+  dsa: {
+    1: DSAAssignment1_Sort,
+    2: DSAAssignment2_Nav,
+    3: DSAAssignment3_Social,
+    4: DSAAssignment4_SQL,
+  },
+  pdm: {
+    1: PdMAssignment1_Steel,
+    2: PdMAssignment2_Wind,
+    3: PdMAssignment3_Metro,
   },
 }
 

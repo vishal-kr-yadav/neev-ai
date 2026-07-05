@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HindiExplainer from '../../../components/HindiExplainer'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ─── DATA ─── */
 const REQUIREMENT_OPTIONS = [
@@ -287,6 +288,7 @@ export default function Assignment1_BankChatbot() {
               edge case handling, and overall chatbot readiness. Detailed feedback coming soon.
             </p>
           </div>
+          <AIEvaluationPanel courseId="llm" assignmentId={1} />
         </motion.div>
       </div>
     )

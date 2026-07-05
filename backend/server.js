@@ -8,6 +8,9 @@ const progressRoutes = require('./routes/progress')
 const questionRoutes = require('./routes/questions')
 const adminRoutes = require('./routes/admin')
 const ragRoutes = require('./routes/rag')
+const evaluateRoutes = require('./routes/evaluate')
+const activityRouter = require('./routes/activity')
+const auth = require('./middleware/auth')
 
 const app = express()
 
@@ -21,6 +24,8 @@ app.use('/api/progress', progressRoutes)
 app.use('/api/questions', questionRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/rag', ragRoutes)
+app.use('/api/evaluate', auth, evaluateRoutes)
+app.use('/api/activity', activityRouter)
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))

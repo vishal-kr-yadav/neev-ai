@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ================================================================
    ASSIGNMENT 2 — PCB Defect Detection System
@@ -950,6 +951,7 @@ export default function Assignment2_PCBQuality() {
           }}>
             Scoring: Coming Soon — An LLM judge will evaluate your responses and provide detailed feedback.
           </div>
+          <AIEvaluationPanel courseId="cv" assignmentId={2} />
         </motion.div>
       )}
     </motion.div>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HindiExplainer from '../../../components/HindiExplainer'
+import AIEvaluationPanel from '../../../components/AIEvaluationPanel'
 
 /* ================================================================
    ASSIGNMENT 3 — Legal Document Intelligence
@@ -329,6 +330,7 @@ export default function Assignment3_LegalDocs() {
               An LLM judge will evaluate your responses across document preprocessing, clause extraction accuracy, RAG pipeline design, hallucination prevention strategy, and ethical compliance. Detailed feedback coming soon.
             </p>
           </div>
+          <AIEvaluationPanel courseId="llm" assignmentId={3} />
         </motion.div>
       </div>
     )

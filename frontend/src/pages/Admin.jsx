@@ -6,7 +6,8 @@ import {
   ChevronLeft, ChevronRight, Ban, Unlock, Key, Trash2, Plus,
   Eye, ArrowUpDown, Download, UserPlus, Edit3, X, Check,
   TrendingUp, BookOpen, Clock, AlertTriangle, RefreshCw,
-  LogOut, Home, UserCheck, UserX,
+  LogOut, Home, UserCheck, UserX, Zap, Target, Award,
+  ChevronDown, ChevronUp, Layers,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import Logo from '../components/Logo'
@@ -41,6 +42,7 @@ const TABS = [
   { id: 'users', label: 'Users', icon: Users },
   { id: 'activity', label: 'Activity', icon: Activity },
   { id: 'questions', label: 'Q&A', icon: MessageSquare },
+  { id: 'analytics', label: 'Analytics', icon: TrendingUp },
 ]
 
 export default function Admin() {
@@ -119,6 +121,7 @@ export default function Admin() {
           {tab === 'users' && <UsersTab token={token} />}
           {tab === 'activity' && <ActivityTab token={token} />}
           {tab === 'questions' && <QuestionsTab token={token} />}
+          {tab === 'analytics' && <AnalyticsTab token={token} />}
         </div>
       </main>
     </div>
@@ -827,6 +830,493 @@ function QuestionsTab({ token }) {
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+// ═══════════════════════════════════════
+// ANALYTICS TAB
+// ═══════════════════════════════════════
+
+// Uses the shared API constant from line 16
+
+function fmtMs(ms) {
+  if (!ms || ms <= 0) return '0h 0m'
+  const totalMin = Math.floor(ms / 60000)
+  const h = Math.floor(totalMin / 60)
+  const m = totalMin % 60
+  return `${h}h ${m}m`
+}
+
+function AnalyticsTab({ token }) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [expandedUser, setExpandedUser] = useState(null)
+
+  const load = async () => {
+    if (!token) return
+    setLoading(true)
+    setError(false)
+    try {
+      const res = await fetch(`${API}/activity/admin/overview`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}))
+        throw new Error(errBody.error || `HTTP ${res.status}`)
+      }
+      setData(await res.json())
+    } catch (e) {
+      console.error('Analytics load error:', e)
+      setError(true)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => { if (token) load() }, [token])
+
+  if (loading) return <Loader />
+  if (error || !data) return (
+    <div className={styles.errorState}>
+      <AlertTriangle size={32} />
+      <p>Failed to load analytics data</p>
+      <button onClick={load}><RefreshCw size={14} /> Retry</button>
+    </div>
+  )
+
+  const {
+    dau = 0, wau = 0, mau = 0,
+    totalPlatformTimeToday = 0,
+    avgTimePerUserPerDay = 0,
+    quizPassRate = 0,
+    dauTrend = [],
+    popularCourses = [],
+    topActiveUsers = [],
+    hourlyActivity = [],
+    quizPerformance = [],
+    dropoffAnalysis = [],
+    interactiveUsage = [],
+  } = data
+
+  const maxDau = Math.max(...dauTrend.map(d => d.count || 0), 1)
+  const maxCourse = Math.max(...popularCourses.map(c => c.views || 0), 1)
+  const maxHour = Math.max(...hourlyActivity.map(h => h.count || 0), 1)
+  const maxInteractive = Math.max(...interactiveUsage.map(u => u.uses || 0), 1)
+
+  const heatmapColor = (count) => {
+    const intensity = count / maxHour
+    if (intensity === 0) return 'var(--bg-secondary)'
+    if (intensity < 0.25) return '#bfdbfe'
+    if (intensity < 0.5) return '#60a5fa'
+    if (intensity < 0.75) return '#3b82f6'
+    return '#1d4ed8'
+  }
+
+  const passRateColor = (rate) => {
+    if (rate >= 70) return { bg: '#d1fae5', color: '#059669' }
+    if (rate >= 50) return { bg: '#fef3c7', color: '#d97706' }
+    return { bg: '#fee2e2', color: '#dc2626' }
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Header actions */}
+      <div className={styles.toolbar}>
+        <button className={styles.refreshBtn} onClick={load}><RefreshCw size={14} /> Refresh</button>
+      </div>
+
+      {/* ── 1. Engagement Overview Cards ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        {[
+          {
+            label: 'Daily / Weekly / Monthly Active',
+            value: `${dau} / ${wau} / ${mau}`,
+            icon: Users, bg: '#ede9fe', color: '#4f46e5',
+            sub: 'DAU · WAU · MAU',
+          },
+          {
+            label: 'Platform Time Today',
+            value: fmtMs(totalPlatformTimeToday),
+            icon: Clock, bg: '#e0f2fe', color: '#0284c7',
+            sub: 'Total across all users',
+          },
+          {
+            label: 'Avg Time / User / Day',
+            value: fmtMs(avgTimePerUserPerDay),
+            icon: Activity, bg: '#fef3c7', color: '#d97706',
+            sub: 'This week',
+          },
+          {
+            label: 'Quiz Pass Rate',
+            value: `${(quizPassRate || 0).toFixed(1)}%`,
+            icon: Award, bg: quizPassRate >= 70 ? '#d1fae5' : quizPassRate >= 50 ? '#fef3c7' : '#fee2e2',
+            color: quizPassRate >= 70 ? '#059669' : quizPassRate >= 50 ? '#d97706' : '#dc2626',
+            sub: 'This month',
+          },
+        ].map((s, i) => (
+          <motion.div
+            key={s.label}
+            className={styles.statCard}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.07 }}
+          >
+            <div className={styles.statIcon} style={{ background: s.bg, color: s.color }}>
+              <s.icon size={20} />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div className={styles.statValue} style={{ fontSize: 18, wordBreak: 'break-all' }}>{s.value}</div>
+              <div className={styles.statLabel}>{s.label}</div>
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>{s.sub}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ── 2. DAU Trend Chart ── */}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}><TrendingUp size={18} /> DAU Trend — Last 30 Days</h3>
+        {dauTrend.length === 0 ? (
+          <p className={styles.empty}>No activity data yet</p>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 180, paddingTop: 24, overflowX: 'auto' }}>
+            {dauTrend.map((d, i) => {
+              const date = new Date(d.date || d._id || '')
+              const isWeekend = date.getDay() === 0 || date.getDay() === 6
+              const heightPct = ((d.count || 0) / maxDau) * 100
+              const label = d.date ? d.date.slice(5) : (d._id || '').slice(5)
+              return (
+                <div
+                  key={i}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end', position: 'relative', minWidth: 18 }}
+                  title={`${label}: ${d.count} DAU`}
+                >
+                  {d.count > 0 && (
+                    <div style={{ position: 'absolute', top: 0, fontSize: 10, fontWeight: 700, color: 'var(--accent)' }}>{d.count}</div>
+                  )}
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: `${Math.max(heightPct, 2)}%` }}
+                    transition={{ duration: 0.5, delay: i * 0.015 }}
+                    style={{
+                      width: '100%',
+                      maxWidth: 28,
+                      background: isWeekend ? '#f59e0b' : 'var(--gradient-primary)',
+                      borderRadius: '4px 4px 0 0',
+                      minHeight: 4,
+                    }}
+                  />
+                  <div style={{ fontSize: 9, color: 'var(--text-muted)', marginTop: 5, whiteSpace: 'nowrap', transform: 'rotate(-45deg)', transformOrigin: 'top left', marginLeft: 8 }}>
+                    {label}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: 16, marginTop: 16, fontSize: 12, color: 'var(--text-muted)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 12, height: 12, background: 'var(--accent)', borderRadius: 2, display: 'inline-block' }} /> Weekdays
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 12, height: 12, background: '#f59e0b', borderRadius: 2, display: 'inline-block' }} /> Weekends
+          </span>
+        </div>
+      </div>
+
+      {/* ── 3 & 4: Popular Courses + Top Active Users side-by-side ── */}
+      <div className={styles.sectionRow}>
+        {/* Popular Courses */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}><BookOpen size={18} /> Popular Courses — This Week</h3>
+          {popularCourses.length === 0 ? (
+            <p className={styles.empty}>No course data yet</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {popularCourses.map((c, i) => (
+                <div key={c.courseId || c._id || i}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{
+                        width: 22, height: 22, borderRadius: '50%', background: 'var(--gradient-primary)',
+                        color: 'white', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                      }}>
+                        {i + 1}
+                      </span>
+                      <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>
+                        {(c.courseId || c._id || 'Unknown').toUpperCase()}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'right' }}>
+                      <div>{c.views || 0} views</div>
+                      <div>{c.uniqueUsers || 0} users</div>
+                    </div>
+                  </div>
+                  <div style={{ height: 6, background: 'var(--bg-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${((c.views || 0) / maxCourse) * 100}%` }}
+                      transition={{ duration: 0.6, delay: i * 0.07 }}
+                      style={{ height: '100%', background: 'var(--gradient-primary)', borderRadius: 3 }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Top 10 Most Active Users */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}><Users size={18} /> Top Active Users — This Week</h3>
+          {topActiveUsers.length === 0 ? (
+            <p className={styles.empty}>No user activity data yet</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {topActiveUsers.slice(0, 10).map((u, i) => (
+                <div key={u.userId || u._id || i}>
+                  <div
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
+                      borderRadius: 8, cursor: 'pointer', transition: 'background 0.15s',
+                      background: expandedUser === (u.userId || u._id) ? 'var(--bg-secondary)' : 'transparent',
+                    }}
+                    onClick={() => setExpandedUser(expandedUser === (u.userId || u._id) ? null : (u.userId || u._id))}
+                  >
+                    <span style={{
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: i < 3 ? ['#fef3c7', '#e0f2fe', '#f3e8ff'][i] : 'var(--bg-secondary)',
+                      color: i < 3 ? ['#d97706', '#0284c7', '#7c3aed'][i] : 'var(--text-muted)',
+                      fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                    }}>
+                      {i + 1}
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {u.name || 'Unknown'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        {fmtMs(u.totalTime)} · {u.activeDays || 0}d · {u.sessions || 0} sessions
+                      </div>
+                    </div>
+                    {expandedUser === (u.userId || u._id)
+                      ? <ChevronUp size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                      : <ChevronDown size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />}
+                  </div>
+                  {expandedUser === (u.userId || u._id) && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      style={{ padding: '8px 12px 10px 44px', fontSize: 12, color: 'var(--text-secondary)', background: 'var(--bg-secondary)', borderRadius: '0 0 8px 8px', marginBottom: 2 }}
+                    >
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Total Time:</span> <strong>{fmtMs(u.totalTime)}</strong></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Active Days:</span> <strong>{u.activeDays || 0}</strong></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Sessions:</span> <strong>{u.sessions || 0}</strong></div>
+                        <div><span style={{ color: 'var(--text-muted)' }}>Avg/Session:</span> <strong>{fmtMs(u.sessions ? (u.totalTime / u.sessions) : 0)}</strong></div>
+                        {u.courses?.length > 0 && (
+                          <div style={{ gridColumn: '1 / -1' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>Courses: </span>
+                            {u.courses.map(c => (
+                              <span key={c} style={{ padding: '1px 7px', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 4, fontSize: 11, marginRight: 4, fontWeight: 600, color: 'var(--accent)' }}>
+                                {c.toUpperCase()}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── 5. Hourly Activity Heatmap ── */}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}><Zap size={18} /> Hourly Activity Heatmap</h3>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>When are users most active? (0 = midnight, 23 = 11 PM)</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 6 }}>
+          {Array.from({ length: 24 }, (_, h) => {
+            const entry = hourlyActivity.find(x => (x.hour ?? x._id) === h) || { count: 0 }
+            const count = entry.count || 0
+            return (
+              <div
+                key={h}
+                title={`${h}:00 — ${count} events`}
+                style={{
+                  aspectRatio: '1',
+                  borderRadius: 8,
+                  background: heatmapColor(count),
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'default',
+                  transition: 'transform 0.15s',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                <div style={{ fontSize: 11, fontWeight: 700, color: count > 0 ? 'white' : 'var(--text-muted)' }}>{h}</div>
+                {count > 0 && <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.85)' }}>{count}</div>}
+              </div>
+            )
+          })}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 14, fontSize: 12, color: 'var(--text-muted)' }}>
+          <span>Low</span>
+          {['#bfdbfe', '#60a5fa', '#3b82f6', '#1d4ed8'].map(c => (
+            <span key={c} style={{ width: 18, height: 10, background: c, borderRadius: 2, display: 'inline-block' }} />
+          ))}
+          <span>High</span>
+        </div>
+      </div>
+
+      {/* ── 6. Quiz Performance per Course ── */}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}><Target size={18} /> Quiz Performance — Per Course</h3>
+        {quizPerformance.length === 0 ? (
+          <p className={styles.empty}>No quiz data yet</p>
+        ) : (
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Attempts</th>
+                  <th>Pass Rate</th>
+                  <th>Avg Score</th>
+                  <th>Visual</th>
+                </tr>
+              </thead>
+              <tbody>
+                {quizPerformance.map((q, i) => {
+                  const { bg, color } = passRateColor(q.passRate || 0)
+                  return (
+                    <tr key={q.courseId || q._id || i}>
+                      <td><strong>{(q.courseId || q._id || 'Unknown').toUpperCase()}</strong></td>
+                      <td>{q.attempts || 0}</td>
+                      <td>
+                        <span className={styles.badge} style={{ background: bg, color }}>
+                          {(q.passRate || 0).toFixed(1)}%
+                        </span>
+                      </td>
+                      <td>{(q.avgScore || 0).toFixed(1)}%</td>
+                      <td style={{ width: 120 }}>
+                        <div style={{ height: 6, background: 'var(--bg-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+                          <div style={{ width: `${Math.min(q.passRate || 0, 100)}%`, height: '100%', background: color, borderRadius: 3, transition: 'width 0.5s' }} />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* ── 7 & 8: Drop-off Analysis + Interactive Usage side-by-side ── */}
+      <div className={styles.sectionRow}>
+        {/* Drop-off Analysis */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}><AlertTriangle size={18} /> Drop-off Analysis</h3>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>High views but low time spent — content users may struggle with</p>
+          {dropoffAnalysis.length === 0 ? (
+            <p className={styles.empty}>No drop-off data yet</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {dropoffAnalysis.map((item, i) => (
+                <div key={item.topicId || i} style={{ padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: 10 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)' }}>
+                        {item.course ? `${item.course.toUpperCase()} → ` : ''}{item.topic || item.topicId || 'Unknown Topic'}
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
+                        {item.views || 0} views · avg {fmtMs(item.avgTimeSpent)} spent
+                      </div>
+                    </div>
+                    <span style={{
+                      padding: '2px 9px',
+                      background: '#fee2e2',
+                      color: '#dc2626',
+                      borderRadius: 100,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                    }}>
+                      Drop-off
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: 'var(--text-muted)', width: 36 }}>Time</span>
+                    <div style={{ flex: 1, height: 5, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{
+                        width: `${Math.min(((item.avgTimeSpent || 0) / 300000) * 100, 100)}%`,
+                        height: '100%',
+                        background: '#f59e0b',
+                        borderRadius: 3,
+                      }} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Interactive Component Usage */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}><Layers size={18} /> Interactive Component Usage</h3>
+          {interactiveUsage.length === 0 ? (
+            <p className={styles.empty}>No interactive usage data yet</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {interactiveUsage.map((item, i) => (
+                <div key={item.component || item._id || i}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{
+                        width: 28, height: 28, borderRadius: 8,
+                        background: 'var(--bg-secondary)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: 'var(--accent)', flexShrink: 0,
+                      }}>
+                        <Zap size={14} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)' }}>
+                          {item.component || item._id || 'Unknown'}
+                        </div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                          {item.uniqueUsers || 0} unique users
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--accent)' }}>{item.uses || 0}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>uses</div>
+                    </div>
+                  </div>
+                  <div style={{ height: 5, background: 'var(--bg-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${((item.uses || 0) / maxInteractive) * 100}%` }}
+                      transition={{ duration: 0.6, delay: i * 0.07 }}
+                      style={{ height: '100%', background: 'var(--gradient-primary)', borderRadius: 3 }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

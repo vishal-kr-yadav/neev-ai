@@ -138,6 +138,28 @@ export function AuthProvider({ children }) {
     return (await res.json()).assignment
   }
 
+  const evaluateAssignment = async (courseId, assignmentId) => {
+    if (!token) return null
+    const res = await fetch(`${API}/evaluate/${courseId}/assignment/${assignmentId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      throw new Error(data.error || 'Evaluation failed')
+    }
+    return (await res.json()).evaluation
+  }
+
+  const getEvaluation = async (courseId, assignmentId) => {
+    if (!token) return null
+    const res = await fetch(`${API}/evaluate/${courseId}/assignment/${assignmentId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return null
+    return (await res.json()).evaluation
+  }
+
   const updateProfile = async (updates) => {
     if (!token) return null
     const res = await fetch(`${API}/auth/profile`, {
@@ -156,7 +178,7 @@ export function AuthProvider({ children }) {
       user, token, loading,
       register, login, logout, updateProfile,
       getProgress, getAllProgress, completeTopic, saveQuizScore, saveFinalQuiz, completeProject,
-      saveAssignment, getAssignment,
+      saveAssignment, getAssignment, evaluateAssignment, getEvaluation,
       isLoggedIn: !!user,
     }}>
       {children}
